@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
                           builder.WithOrigins("http://example.com") // Specify the allowed origin
                                  .AllowAnyHeader()
                                  .AllowAnyMethod();
-                      });
+                      });
 });
 
 // Register the DbContext with dependency injection
