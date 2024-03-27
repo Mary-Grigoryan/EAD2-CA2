@@ -8,6 +8,19 @@ local.properties
 # Log/OS Files
 *.log
 
+# Default ignore rules for .NET Core projects
+**/bin/
+**/obj/
+**/out/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+**/*.user
+**/*.userosscache
+
 # Android Studio generated files and folders
 captures/
 .externalNativeBuild/
