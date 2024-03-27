@@ -8,6 +8,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowSpecificOrigin",
+                      builder =>
+                      {
+                          builder.WithOrigins("http://example.com") // Specify the allowed origin
+                                 .AllowAnyHeader()
+                                 .AllowAnyMethod();
+                      });
+});
+
 // Register the DbContext with dependency injection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -25,5 +37,7 @@ app.UseHttpsRedirection();
 
 // Define any HTTP API endpoints here
 // app.MapGet("/api/endpoint", (context) => { /* ... */ });
+
+app.UseCors("AllowSpecificOrigin"); // Use the CORS policy
 
 app.Run();
