@@ -1,26 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mary/X00178070/year4/sem2/EAD2/CA2/EAD2-CA2/BookTrackerApi/BookTrackerApi.csproj": {}
+    "C:\\Users\\ciara\\EAD2-CA2\\BookTrackerApi\\BookTrackerApi.csproj": {}
   },
   "projects": {
-    "/Users/mary/X00178070/year4/sem2/EAD2/CA2/EAD2-CA2/BookTrackerApi/BookTrackerApi.csproj": {
+    "C:\\Users\\ciara\\EAD2-CA2\\BookTrackerApi\\BookTrackerApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mary/X00178070/year4/sem2/EAD2/CA2/EAD2-CA2/BookTrackerApi/BookTrackerApi.csproj",
+        "projectUniqueName": "C:\\Users\\ciara\\EAD2-CA2\\BookTrackerApi\\BookTrackerApi.csproj",
         "projectName": "BookTrackerApi",
-        "projectPath": "/Users/mary/X00178070/year4/sem2/EAD2/CA2/EAD2-CA2/BookTrackerApi/BookTrackerApi.csproj",
-        "packagesPath": "/Users/mary/.nuget/packages/",
-        "outputPath": "/Users/mary/X00178070/year4/sem2/EAD2/CA2/EAD2-CA2/BookTrackerApi/obj/",
+        "projectPath": "C:\\Users\\ciara\\EAD2-CA2\\BookTrackerApi\\BookTrackerApi.csproj",
+        "packagesPath": "C:\\Users\\ciara\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ciara\\EAD2-CA2\\BookTrackerApi\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/mary/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\ciara\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -42,6 +48,16 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -67,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
