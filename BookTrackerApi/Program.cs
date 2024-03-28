@@ -20,6 +20,17 @@ builder.Services.AddCors(options =>
                       });
 });
 
+// Add localization services to the services container
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { "en-US", "es-ES", "fr-FR" }; // Add other cultures you want to support
+    options.SetDefaultCulture(supportedCultures[0])
+           .AddSupportedCultures(supportedCultures)
+           .AddSupportedUICultures(supportedCultures);
+});
+
 // Register the DbContext with dependency injection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -39,5 +50,8 @@ app.UseHttpsRedirection();
 // app.MapGet("/api/endpoint", (context) => { /* ... */ });
 
 app.UseCors("AllowSpecificOrigin"); // Use the CORS policy
+
+app.UseRequestLocalization();
+// ... other middleware like app.UseRouting(), app.UseEndpoints(), etc.
 
 app.Run();

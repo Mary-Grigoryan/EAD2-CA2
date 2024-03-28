@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BookTrackerApi.Data;
 using BookTrackerApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -9,15 +10,21 @@ public class BooksController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
 
-    public BooksController(ApplicationDbContext context)
+    private readonly IStringLocalizer<BooksController> _localizer; // Localizer
+
+    public BooksController(ApplicationDbContext context, IStringLocalizer<BooksController> localizer) // Localizer
     {
         _context = context;
+        _localizer = localizer; // Localizer
     }
 
     // GET: api/books
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
     {
+        // Example of using the localizer to get a localized string
+        var message = _localizer["BooksListMessage"];
+        // Use 'message' wherever you need the localized string
         return await _context.Books.ToListAsync();
     }
 
@@ -29,7 +36,8 @@ public class BooksController : ControllerBase
 
         if (book == null)
         {
-            return NotFound();
+            // Using localizer for NotFound message
+            return NotFound(_localizer["BookNotFound"].Value);
         }
 
         return book;
@@ -42,7 +50,8 @@ public class BooksController : ControllerBase
         _context.Books.Add(book);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
+        // Using localizer for the Created message
+        return CreatedAtAction(nameof(GetBook), new { id = book.Id }, _localizer["BookCreatedMessage"].Value);
     }
 
     // PUT: api/books/{id}

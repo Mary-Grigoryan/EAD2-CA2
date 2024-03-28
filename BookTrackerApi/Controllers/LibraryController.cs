@@ -6,6 +6,7 @@ using BookTrackerApi.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.Extensions.Localization; // Required for IStringLocalizer
 
 namespace BookTrackerApi.Controllers
 {
@@ -15,15 +16,21 @@ namespace BookTrackerApi.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public LibraryController(ApplicationDbContext context)
+        private readonly IStringLocalizer<LibraryController> _localizer; // Add this
+
+        public LibraryController(ApplicationDbContext context, IStringLocalizer<LibraryController> localizer) // Add this
         {
             _context = context;
+            _localizer = localizer; // Add this
         }
 
         // GET: api/library
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LibraryEntry>>> GetLibraryEntries()
         {
+            // Example of using the localizer
+            var message = _localizer["LibraryEntriesRetrieved"];
+            // Do something with the message or return it in the response
             return await _context.LibraryEntries.Include(le => le.Book).ToListAsync();
         }
 
@@ -35,7 +42,8 @@ namespace BookTrackerApi.Controllers
 
             if (libraryEntry == null)
             {
-                return NotFound();
+                // Using localizer for NotFound message
+                return NotFound(_localizer["LibraryEntryNotFound"].Value);
             }
 
             return libraryEntry;
@@ -48,7 +56,8 @@ namespace BookTrackerApi.Controllers
             _context.LibraryEntries.Add(libraryEntry);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetLibraryEntry), new { id = libraryEntry.Id }, libraryEntry);
+            // Using localizer for the Created message
+            return CreatedAtAction(nameof(GetLibraryEntry), new { id = libraryEntry.Id }, _localizer["LibraryEntryCreated"].Value);
         }
 
         [HttpPatch("{id}")]

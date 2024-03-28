@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- ... some schema information -->
+
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Bienvenue dans notre application!</value>
+  </data>
+  <data name="GoodbyeMessage" xml:space="preserve">
+    <value>Au revoir et merci d'utiliser notre application!</value>
+  </data>
+  <!-- More key-value pairs here -->
+</root>
