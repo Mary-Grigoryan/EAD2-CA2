@@ -1,37 +1,35 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using BookTrackerApi.Data;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the service container.
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Add Swagger generation tool
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookTracker API", Version = "v1" });
+});
 
 // Add CORS policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "AllowSpecificOrigin",
-                      builder =>
-                      {
-                          builder.WithOrigins("http://example.com") // Specify the allowed origin
-                                 .AllowAnyHeader()
-                                 .AllowAnyMethod();
-                      });
+    options.AddPolicy(name: "AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
 });
 
-// Add localization services to the services container
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-
-builder.Services.Configure<RequestLocalizationOptions>(options =>
-{
-    var supportedCultures = new[] { "en-US", "es-ES", "fr-FR" }; // Add other cultures you want to support
-    options.SetDefaultCulture(supportedCultures[0])
-           .AddSupportedCultures(supportedCultures)
-           .AddSupportedUICultures(supportedCultures);
-});
-
-// Register the DbContext with dependency injection
+// Add DbContext using SQL Server Provider
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -41,17 +39,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookTracker API v1"));
 }
 
 app.UseHttpsRedirection();
 
-// Define any HTTP API endpoints here
-// app.MapGet("/api/endpoint", (context) => { /* ... */ });
+// Use CORS policy
+app.UseCors("AllowAll");
 
-app.UseCors("AllowSpecificOrigin"); // Use the CORS policy
+app.UseAuthorization();
 
-app.UseRequestLocalization();
-// ... other middleware like app.UseRouting(), app.UseEndpoints(), etc.
+app.MapControllers(); // Map attribute-routed API controllers
 
 app.Run();
