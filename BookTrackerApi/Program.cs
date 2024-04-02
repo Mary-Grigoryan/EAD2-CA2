@@ -1,35 +1,30 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 using BookTrackerApi.Data;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the service container.
-builder.Services.AddControllers();
+// Add services to the container.
+builder.Services.AddControllers()
+    .AddDataAnnotationsLocalization()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
 builder.Services.AddEndpointsApiExplorer();
-
-// Add Swagger generation tool
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookTracker API", Version = "v1" });
+    c.SwaggerDoc("v1", new() { Title = "BookTracker API", Version = "v1" });
 });
 
-// Add CORS policy
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "AllowAll",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
-});
+// Add localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-// Add DbContext using SQL Server Provider
+// Add database context with SQL Server Provider
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -44,11 +39,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Use CORS policy
-app.UseCors("AllowAll");
+// Use localization
+var supportedCultures = new[] { "en-US", "es-ES", "fr-FR" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
 
 app.UseAuthorization();
 
-app.MapControllers(); // Map attribute-routed API controllers
+app.MapControllers();
 
 app.Run();

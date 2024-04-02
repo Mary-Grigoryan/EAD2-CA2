@@ -10,21 +10,21 @@ using Microsoft.Extensions.Localization; // Required for IStringLocalizer
 
 namespace BookTrackerApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class LibraryController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        private readonly IStringLocalizer<LibraryController> _localizer; // Add this
+        private readonly IStringLocalizer<LibraryController> _localizer;
 
-        public LibraryController(ApplicationDbContext context, IStringLocalizer<LibraryController> localizer) // Add this
+        public LibraryController(ApplicationDbContext context, IStringLocalizer<LibraryController> localizer)
         {
             _context = context;
-            _localizer = localizer; // Add this
+            _localizer = localizer;
         }
 
-        // GET: api/library
+        // GET: /library
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LibraryEntry>>> GetLibraryEntries()
         {
@@ -34,7 +34,7 @@ namespace BookTrackerApi.Controllers
             return await _context.LibraryEntries.Include(le => le.Book).ToListAsync();
         }
 
-        // GET: api/library/{id}
+        // GET: /library/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<LibraryEntry>> GetLibraryEntry(int id)
         {
@@ -49,7 +49,7 @@ namespace BookTrackerApi.Controllers
             return libraryEntry;
         }
 
-        // POST: api/library
+        // POST: /library
         [HttpPost]
         public async Task<ActionResult<LibraryEntry>> PostLibraryEntry(LibraryEntry libraryEntry)
         {
@@ -86,7 +86,7 @@ namespace BookTrackerApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/library/{id}
+        // DELETE: /library/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLibraryEntry(int id)
         {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class BooksController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
@@ -18,7 +18,7 @@ public class BooksController : ControllerBase
         _localizer = localizer; // Localizer
     }
 
-    // GET: api/books
+    // GET: /books
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
     {
@@ -28,22 +28,22 @@ public class BooksController : ControllerBase
         return await _context.Books.ToListAsync();
     }
 
-    // GET: api/books/{id}
+    // GET: /books/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<Book>> GetBook(int id)
     {
         var book = await _context.Books.FindAsync(id);
 
-        if (book == null)
+        if (book == null || _context.Books == null)
         {
             // Using localizer for NotFound message
-            return NotFound(_localizer["BookNotFound"].Value);
+            return NotFound();
         }
 
         return book;
     }
 
-    // POST: api/books
+    // POST: /books
     [HttpPost]
     public async Task<ActionResult<Book>> PostBook(Book book)
     {
@@ -54,7 +54,7 @@ public class BooksController : ControllerBase
         return CreatedAtAction(nameof(GetBook), new { id = book.Id }, _localizer["BookCreatedMessage"].Value);
     }
 
-    // PUT: api/books/{id}
+    // PUT: /books/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> PutBook(int id, Book book)
     {
@@ -84,7 +84,7 @@ public class BooksController : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/books/{id}
+    // DELETE: /books/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(int id)
     {
