@@ -31,11 +31,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+
+// {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookTracker API v1"));
-}
+// }
 
 app.UseHttpsRedirection();
 
@@ -50,6 +51,11 @@ app.UseRequestLocalization(localizationOptions);
 
 app.UseAuthorization();
 
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/swagger");
+    return Task.CompletedTask;
+});
 app.MapControllers();
 
 app.Run();
