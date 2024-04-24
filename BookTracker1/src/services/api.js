@@ -1,39 +1,27 @@
-const BASE_URL = 'https://booktrackerapp2.azurewebsites.net';
+// src/api/api.js
+const API_URL = 'https://booktrackerapp2.azurewebsites.net';
 
-// Function to fetch books
-export const fetchBooks = async (title) => {
-    try {
-        const response = await fetch(`${BASE_URL}/books/search?query=${encodeURIComponent(title)}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+export const fetchApi = async (endpoint, method, body) => {
+    const response = await fetch(`${API_URL}/${endpoint}`, {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+    });
+
+    // Check if the HTTP response status code is successful
+    if (response.ok) {
+        try {
+            // Try parsing the response as JSON
+            const jsonResponse = await response.json();
+            return { ok: true, data: jsonResponse };
+        } catch (error) {
+            // If JSON parsing fails, return the error
+            return { ok: false, error: "Failed to parse JSON response." };
         }
-        return await response.json();
-    } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
+    } else {
+        // If the response status is not successful, return the status and statusText
+        return { ok: false, error: `HTTP Error: ${response.status} - ${response.statusText}` };
     }
 };
-
-// Function to fetch a single book by ID
-export const fetchBookById = async (bookId) => {
-    try {
-        const response = await fetch(`${BASE_URL}/books/${bookId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
-    }
-};
-
-// Add other API functions as needed
