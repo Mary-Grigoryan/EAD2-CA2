@@ -10,7 +10,7 @@ namespace BookTrackerApi.Models
         
         [ForeignKey("Book")]
         public int BookId { get; set; }
-        public Book Book { get; set; }
+        public required Book Book { get; set; }
         
         public string UserId { get; set; } // Assume we have user identification in place
         

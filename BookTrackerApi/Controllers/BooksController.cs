@@ -43,6 +43,27 @@ public class BooksController : ControllerBase
         return book;
     }
 
+    // GET: /books/search?query=title
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<Book>>> SearchBooks(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            // If no search query is provided, you may choose to return all books or an empty list
+            return await _context.Books.ToListAsync();
+        }
+
+        // Adjusting query to be case-insensitive
+        title = title.ToLower();
+
+        var filteredBooks = await _context.Books
+        .Where(b => b.Title.ToLower().Contains(title))
+        .Select(b => new { b.Title, b.Author, b.PublicationYear }) // Select only the required fields
+        .ToListAsync();
+
+        return Ok(filteredBooks);
+    }
+
     // POST: /books
     [HttpPost]
     public async Task<ActionResult<Book>> PostBook(Book book)

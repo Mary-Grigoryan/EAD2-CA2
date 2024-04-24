@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookTrackerApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240424013422_Test")]
+    [Migration("20240424134429_Test")]
     partial class Test
     {
         /// <inheritdoc />
