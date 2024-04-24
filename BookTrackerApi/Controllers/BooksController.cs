@@ -4,6 +4,8 @@ using BookTrackerApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
+namespace BookTrackerApi.Controllers
+{
 [ApiController]
 [Route("[controller]")]
 public class BooksController : ControllerBase
@@ -125,4 +127,5 @@ public class BooksController : ControllerBase
     {
         return _context.Books.Any(e => e.Id == id);
     }
+}
 }
