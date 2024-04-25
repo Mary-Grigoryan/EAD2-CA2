@@ -53,11 +53,16 @@ namespace BookTrackerApi.Controllers
         [HttpPost]
         public async Task<ActionResult<LibraryEntry>> PostLibraryEntry(LibraryEntry libraryEntry)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _context.LibraryEntries.Add(libraryEntry);
             await _context.SaveChangesAsync();
 
             // Using localizer for the Created message
-            return CreatedAtAction(nameof(GetLibraryEntry), new { id = libraryEntry.Id }, _localizer["LibraryEntryCreated"].Value);
+            return CreatedAtAction(nameof(GetLibraryEntry), new { id = libraryEntry.Id }, libraryEntry);
         }
 
         [HttpPatch("{id}")]
