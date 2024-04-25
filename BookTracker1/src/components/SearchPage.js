@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { View, FlatList, Text, Alert, TextInput, StyleSheet, Button } from 'react-native';
 import { fetchApi } from '../services/api';
 import { getUserId } from '../services/userServices';
@@ -7,6 +8,8 @@ const SearchPage = () => {
     const [books, setBooks] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [userId, setUserId] = useState(null);
+
+    const navigation = useNavigation(); // Get navigation prop
 
     useEffect(() => {
         const initializeUserId = async () => {
@@ -63,6 +66,11 @@ const SearchPage = () => {
         }
     };
 
+    // navigate to My Library page
+    const goToMyLibrary = () => {
+        navigation.navigate('My Library'); // Use the name you defined in AppNavigator.js
+    };
+
 
     return (
         <View style={styles.container}>
@@ -73,6 +81,7 @@ const SearchPage = () => {
                 placeholder="Search books by title"
             />
             <Button title="Search" onPress={searchBooks} />
+            <Button title="Go to My Library" onPress={goToMyLibrary} />
             <FlatList
                 data={books}
                 keyExtractor={(item) => item?.id?.toString() ?? 'default-value'}
