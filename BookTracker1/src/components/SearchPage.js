@@ -44,34 +44,8 @@ const SearchPage = () => {
         }
     };
 
-    const addToLibrary = async (bookId) => {
-        if (!userId) {
-            Alert.alert('User ID not set', 'Cannot add book to library.');
-            return;
-        }
-
-        const payload = {
-            BookId: bookId,
-            UserId: userId,
-            ReadingStatus: 'to read', // or any default status
-        };
-
-        console.log('Sending data to Library:', payload);
-
-        const { ok, data, error } = await fetchApi('Library', 'POST', payload);
-
-        if (ok) {
-            Alert.alert('Success', 'Book added to library!');
-        } else {
-            // The error might contain more details about why the request failed
-            console.error('Error while adding book:', error);
-            Alert.alert('Error Adding Book', error);
-        }
-    };
-
-    // navigate to My Library page
     const goToMyLibrary = () => {
-        navigation.navigate('My Library'); // Use the name you defined in AppNavigator.js
+        navigation.navigate('My Library');
     };
 
 
@@ -91,7 +65,6 @@ const SearchPage = () => {
                 renderItem={({ item }) => (
                     <View>
                         <Text>{item.title} - {item.author} ({item.publicationYear})</Text>
-                        {/* <Button title="Add to Library" onPress={() => addToLibrary(item.id)} /> */}
                         <Button title="View Details" onPress={() => navigateToBookDetails(item.id)} />
                     </View>
                 )}
