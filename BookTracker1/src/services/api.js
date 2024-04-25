@@ -14,6 +14,10 @@ export const fetchApi = async (endpoint, method, body) => {
 
     // Check if the HTTP response status code is successful
     if (response.ok) {
+        // If the status code is 204, it means success with no content, so don't try to parse JSON
+        if (response.status === 204) {
+            return { ok: true, data: null }; // Return null data
+        }
         try {
             // Try parsing the response as JSON
             const jsonResponse = await response.json();

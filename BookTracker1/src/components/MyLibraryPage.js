@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, Alert, StyleSheet } from 'react-native';
+import { View, FlatList, Text, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { fetchApi } from '../services/api';
 import { getUserId } from '../services/userServices';
 
@@ -25,6 +26,16 @@ const MyLibraryPage = () => {
         fetchLibraryEntries();
     }, []);
 
+    const handleDelete = async (entryId) => {
+        const { ok, data, error } = await fetchApi(`library/${entryId}`, 'DELETE');
+        if (ok) {
+            setLibraryEntries(currentEntries => currentEntries.filter(entry => entry.id !== entryId));
+            Alert.alert('Success', 'Book deleted from library');
+        } else {
+            console.log('Failed to delete, status might not be 204:', error);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -35,6 +46,9 @@ const MyLibraryPage = () => {
                         <Text style={styles.title}>{item.bookTitle || 'No title'}</Text>
                         <Text>{`Author: ${item.bookAuthor || 'Unknown'}`}</Text>
                         <Text>{`Status: ${item.readingStatus}`}</Text>
+                        <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteIcon}>
+                            <Icon name="delete" size={24} color="red" />
+                        </TouchableOpacity>
                     </View>
                 )}
             />
@@ -55,6 +69,11 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 20,
+    },
+    deleteIcon: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
     },
 });
 
