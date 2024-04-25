@@ -6,7 +6,8 @@ using BookTrackerApi.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.Extensions.Localization; // Required for IStringLocalizer
+using Microsoft.Extensions.Localization;
+
 
 namespace BookTrackerApi.Controllers
 {
@@ -15,7 +16,6 @@ namespace BookTrackerApi.Controllers
     public class LibraryController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
         private readonly IStringLocalizer<LibraryController> _localizer;
 
         public LibraryController(ApplicationDbContext context, IStringLocalizer<LibraryController> localizer)
@@ -80,28 +80,38 @@ namespace BookTrackerApi.Controllers
             return CreatedAtAction(nameof(GetLibraryEntry), new { id = libraryEntry.Id }, libraryEntry);
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchLibraryEntry(int id, [FromBody] JsonPatchDocument<LibraryEntry> patchDoc)
+        // PUT: /library/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateLibraryEntry(int id, [FromBody] UpdateLibraryEntryDto updateDto)
         {
-            if (patchDoc == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             var libraryEntry = await _context.LibraryEntries.FindAsync(id);
             if (libraryEntry == null)
             {
-                return NotFound();
+                return NotFound(_localizer["LibraryEntryNotFound"].Value);
             }
 
-            patchDoc.ApplyTo(libraryEntry);
+            libraryEntry.ReadingStatus = updateDto.ReadingStatus;
 
-            if (!TryValidateModel(libraryEntry))
+            try
             {
-                return new BadRequestObjectResult(ModelState);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LibraryEntryExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
