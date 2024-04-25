@@ -1,5 +1,3 @@
-// MyLibraryPage.js
-
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, Alert, StyleSheet } from 'react-native';
 import { fetchApi } from '../services/api';

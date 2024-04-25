@@ -8,7 +8,6 @@ const SearchPage = () => {
     const [books, setBooks] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [userId, setUserId] = useState(null);
-
     const navigation = useNavigation(); // Get navigation prop
 
     useEffect(() => {
@@ -29,6 +28,10 @@ const SearchPage = () => {
         } else {
             Alert.alert('Error Fetching Books', error);
         }
+    };
+
+    const navigateToBookDetails = (bookId) => {
+        navigation.navigate('Book Details', { bookId });
     };
 
     const searchBooks = async () => {
@@ -88,7 +91,8 @@ const SearchPage = () => {
                 renderItem={({ item }) => (
                     <View>
                         <Text>{item.title} - {item.author} ({item.publicationYear})</Text>
-                        <Button title="Add to Library" onPress={() => addToLibrary(item.id)} />
+                        {/* <Button title="Add to Library" onPress={() => addToLibrary(item.id)} /> */}
+                        <Button title="View Details" onPress={() => navigateToBookDetails(item.id)} />
                     </View>
                 )}
                 contentContainerStyle={styles.listContainer}
