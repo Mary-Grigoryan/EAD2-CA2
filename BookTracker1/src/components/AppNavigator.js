@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator();
 function AppNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SearchPage" component={SearchPage} />
+      <Stack.Screen name="All Books" component={SearchPage} />
     </Stack.Navigator>
   );
 }

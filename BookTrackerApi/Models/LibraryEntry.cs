@@ -12,7 +12,7 @@ namespace BookTrackerApi.Models
         public int BookId { get; set; }
         public required Book Book { get; set; }
         
-        public string UserId { get; set; } // Assume we have user identification in place
+        // public string UserId { get; set; } // Assume we have user identification in place
         
         public string ReadingStatus { get; set; } // "to read", "reading now", "have read"
     }

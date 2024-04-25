@@ -1,4 +1,3 @@
-// src/api/api.js
 const API_URL = 'https://booktrackerapp2.azurewebsites.net';
 
 export const fetchApi = async (endpoint, method, body) => {
@@ -9,6 +8,9 @@ export const fetchApi = async (endpoint, method, body) => {
         },
         body: JSON.stringify(body)
     });
+    console.log('Response:', response);
+    console.log('Status:', response.status);
+    console.log('Headers:', JSON.stringify(response.headers));
 
     // Check if the HTTP response status code is successful
     if (response.ok) {
