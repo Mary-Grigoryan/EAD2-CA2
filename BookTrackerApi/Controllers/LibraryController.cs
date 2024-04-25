@@ -26,12 +26,26 @@ namespace BookTrackerApi.Controllers
 
         // GET: /library
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LibraryEntry>>> GetLibraryEntries()
+        public async Task<ActionResult<IEnumerable<object>>> GetLibraryEntries()
         {
-            // Example of using the localizer
-            var message = _localizer["LibraryEntriesRetrieved"];
-            // Do something with the message or return it in the response
-            return await _context.LibraryEntries.ToListAsync();
+            // Perform a manual join to get library entries with book details
+            var libraryWithBooks = await _context.LibraryEntries
+                .Join(_context.Books,
+                    library => library.BookId,
+                    book => book.Id,
+                    (library, book) => new
+                    {
+                        library.Id,
+                        library.BookId,
+                        library.UserId,
+                        library.ReadingStatus,
+                        BookTitle = book.Title,
+                        BookAuthor = book.Author,
+                        BookPublicationYear = book.PublicationYear
+                    })
+                .ToListAsync();
+
+            return Ok(libraryWithBooks);
         }
 
         // GET: /library/{id}
