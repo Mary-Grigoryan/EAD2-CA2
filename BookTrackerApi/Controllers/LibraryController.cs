@@ -31,14 +31,14 @@ namespace BookTrackerApi.Controllers
             // Example of using the localizer
             var message = _localizer["LibraryEntriesRetrieved"];
             // Do something with the message or return it in the response
-            return await _context.LibraryEntries.Include(le => le.Book).ToListAsync();
+            return await _context.LibraryEntries.ToListAsync();
         }
 
         // GET: /library/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<LibraryEntry>> GetLibraryEntry(int id)
         {
-            var libraryEntry = await _context.LibraryEntries.Include(le => le.Book).FirstOrDefaultAsync(le => le.Id == id);
+            var libraryEntry = await _context.LibraryEntries.FirstOrDefaultAsync(le => le.Id == id);
 
             if (libraryEntry == null)
             {
@@ -51,17 +51,18 @@ namespace BookTrackerApi.Controllers
 
         // POST: /library
         [HttpPost]
-        public async Task<ActionResult<LibraryEntry>> PostLibraryEntry(LibraryEntry libraryEntry)
+        public async Task<ActionResult<LibraryEntry>> PostLibraryEntry([FromBody] LibraryEntryDto libraryEntryDto)
         {
-            if (!ModelState.IsValid)
+            var libraryEntry = new LibraryEntry
             {
-                return BadRequest(ModelState);
-            }
+                BookId = libraryEntryDto.BookId,
+                UserId = libraryEntryDto.UserId,
+                ReadingStatus = libraryEntryDto.ReadingStatus
+            };
 
             _context.LibraryEntries.Add(libraryEntry);
             await _context.SaveChangesAsync();
 
-            // Using localizer for the Created message
             return CreatedAtAction(nameof(GetLibraryEntry), new { id = libraryEntry.Id }, libraryEntry);
         }
 

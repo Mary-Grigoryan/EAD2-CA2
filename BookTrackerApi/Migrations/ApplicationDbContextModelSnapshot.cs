@@ -77,20 +77,7 @@ namespace BookTrackerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
-
                     b.ToTable("LibraryEntries");
-                });
-
-            modelBuilder.Entity("BookTrackerApi.Models.LibraryEntry", b =>
-                {
-                    b.HasOne("BookTrackerApi.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
                 });
 #pragma warning restore 612, 618
         }

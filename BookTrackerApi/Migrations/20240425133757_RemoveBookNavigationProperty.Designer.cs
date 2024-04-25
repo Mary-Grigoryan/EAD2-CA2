@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookTrackerApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240425125210_Test")]
-    partial class Test
+    [Migration("20240425133757_RemoveBookNavigationProperty")]
+    partial class RemoveBookNavigationProperty
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,20 +80,7 @@ namespace BookTrackerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
-
                     b.ToTable("LibraryEntries");
-                });
-
-            modelBuilder.Entity("BookTrackerApi.Models.LibraryEntry", b =>
-                {
-                    b.HasOne("BookTrackerApi.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
                 });
 #pragma warning restore 612, 618
         }

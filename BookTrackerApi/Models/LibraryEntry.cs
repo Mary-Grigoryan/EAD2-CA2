@@ -12,8 +12,8 @@ namespace BookTrackerApi.Models
         [ForeignKey("Book")]
         public int BookId { get; set; }
 
-        [JsonIgnore] // prevent serialization/deserialization
-        public Book Book { get; set; }
+        // [JsonIgnore] // prevent serialization/deserialization
+        // public Book Book { get; set; }
 
         public string UserId { get; set; } // Assume we have user identification in place
 
