@@ -63,13 +63,17 @@ const SearchPage = () => {
                 onChangeText={setSearchQuery}
                 placeholder="Search books by title"
             />
-            <Button title="Search" onPress={searchBooks} />
-            <Button title="Go to My Library" onPress={goToMyLibrary} />
+            <View style={styles.button}>
+                <Button title="Search" onPress={searchBooks} />
+            </View>
+            <View style={styles.button}>
+                <Button title="My Library" onPress={goToMyLibrary} />
+            </View>
             <FlatList
                 data={books}
                 keyExtractor={(item, index) => item?.id?.toString() ?? `default-${index}`}
                 renderItem={({ item }) => (
-                    <View>
+                    <View style={styles.bookItem}>
                         <Text>{item.Title} - {item.Author} ({item.PublicationYear})</Text>
                         <Button title="View Details" onPress={() => navigateToBookDetails(item.Id)} />
                     </View>
@@ -98,6 +102,13 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         padding: 20,
+    },
+    bookItem: {
+        marginBottom: 20,
+    },
+    button: {
+        marginTop: 10,
+        width: '90%',
     },
 });
 

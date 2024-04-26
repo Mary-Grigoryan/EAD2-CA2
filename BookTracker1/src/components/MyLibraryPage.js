@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
     item: {
-        backgroundColor: '#f9c2ff',
+        backgroundColor: '#cad2c5',
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,

@@ -67,12 +67,12 @@ const BookDetails = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Text>Title: {book.Title}</Text>
-            <Text>Author: {book.Author}</Text>
-            <Text>ISBN: {book.ISBN}</Text>
-            <Text>Genre: {book.Genre}</Text>
-            <Text>Publication Year: {book.PublicationYear}</Text>
-            <Text>Synopsis: {book.Synopsis || 'N/A'}</Text>
+            <Text style={styles.text}>Title: {book.Title}</Text>
+            <Text style={styles.text}>Author: {book.Author}</Text>
+            <Text style={styles.text}>ISBN: {book.ISBN}</Text>
+            <Text style={styles.text}>Genre: {book.Genre}</Text>
+            <Text style={styles.text}>Publication Year: {book.PublicationYear}</Text>
+            <Text style={styles.text}>Synopsis: {book.Synopsis || 'N/A'}</Text>
             <Button title="Add to My Library" onPress={() => addToLibrary(book.Id)} />
         </View>
     );
@@ -84,6 +84,9 @@ const styles = StyleSheet.create({
         alignItems: 'left',
         justifyContent: 'center',
         padding: 20,
+    },
+    text: {
+        marginBottom: 10,
     },
 });
 
