@@ -31,6 +31,12 @@ const SearchPage = () => {
     };
 
     const navigateToBookDetails = (bookId) => {
+        console.log('Navigating to details for book ID:', bookId);
+        if (bookId === undefined) {
+            console.error('Book ID is undefined');
+            // Handle the error case here
+            return;
+        }
         navigation.navigate('Book Details', { bookId });
     };
 
@@ -61,11 +67,11 @@ const SearchPage = () => {
             <Button title="Go to My Library" onPress={goToMyLibrary} />
             <FlatList
                 data={books}
-                keyExtractor={(item) => item?.id?.toString() ?? 'default-value'}
+                keyExtractor={(item, index) => item?.id?.toString() ?? `default-${index}`}
                 renderItem={({ item }) => (
                     <View>
-                        <Text>{item.title} - {item.author} ({item.publicationYear})</Text>
-                        <Button title="View Details" onPress={() => navigateToBookDetails(item.id)} />
+                        <Text>{item.Title} - {item.Author} ({item.PublicationYear})</Text>
+                        <Button title="View Details" onPress={() => navigateToBookDetails(item.Id)} />
                     </View>
                 )}
                 contentContainerStyle={styles.listContainer}
@@ -78,8 +84,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start', // changed to flex-start to have search on top
-        paddingTop: 20 // add some padding at the top
+        justifyContent: 'flex-start',
+        paddingTop: 20,
     },
     searchInput: {
         height: 40,

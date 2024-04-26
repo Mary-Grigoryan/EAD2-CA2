@@ -7,6 +7,7 @@ import { getUserId } from '../services/userServices';
 const MyLibraryPage = () => {
     const [libraryEntries, setLibraryEntries] = useState([]);
     const [userId, setUserId] = useState('');
+    const [refreshing, setRefreshing] = React.useState(false);
 
     useEffect(() => {
         const fetchLibraryEntries = async () => {
@@ -14,9 +15,9 @@ const MyLibraryPage = () => {
             setUserId(user);
             const { ok, data, error } = await fetchApi('Library', 'GET');
             if (ok) {
-                console.log('Data:', data); // Log to check what's coming from backend
-                const userEntries = data.filter(entry => entry.userId === user);
-                console.log('User Entries:', userEntries); // Verify the filtering
+                console.log('Data:', data);
+                const userEntries = data.filter(entry => entry.UserId === user);
+                console.log('User Entries:', userEntries);
                 setLibraryEntries(userEntries);
             } else {
                 Alert.alert('Error', `Failed to fetch library entries: ${error}`);
@@ -29,7 +30,11 @@ const MyLibraryPage = () => {
     const handleDelete = async (entryId) => {
         const { ok, data, error } = await fetchApi(`library/${entryId}`, 'DELETE');
         if (ok) {
-            setLibraryEntries(currentEntries => currentEntries.filter(entry => entry.id !== entryId));
+            setRefreshing(true); // Set refreshing to true to force re-rendering
+            setLibraryEntries(currentEntries => {
+                return [...currentEntries.filter(entry => entry.Id !== entryId)];
+            });
+            setRefreshing(false); // Set refreshing to false once done
             Alert.alert('Success', 'Book deleted from library');
         } else {
             console.log('Failed to delete, status might not be 204:', error);
@@ -40,13 +45,14 @@ const MyLibraryPage = () => {
         <View style={styles.container}>
             <FlatList
                 data={libraryEntries}
-                keyExtractor={(item) => item.id.toString()}
+                extraData={refreshing}
+                keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.item}>
-                        <Text style={styles.title}>{item.bookTitle || 'No title'}</Text>
-                        <Text>{`Author: ${item.bookAuthor || 'Unknown'}`}</Text>
-                        <Text>{`Status: ${item.readingStatus}`}</Text>
-                        <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteIcon}>
+                        <Text style={styles.title}>{item.BookTitle || 'No title'}</Text>
+                        <Text>{`Author: ${item.BookAuthor || 'Unknown'}`}</Text>
+                        <Text>{`Status: ${item.ReadingStatus}`}</Text>
+                        <TouchableOpacity onPress={() => handleDelete(item.Id)} style={styles.deleteIcon}>
                             <Icon name="delete" size={24} color="red" />
                         </TouchableOpacity>
                     </View>

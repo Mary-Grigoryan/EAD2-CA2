@@ -28,16 +28,20 @@ const BookDetails = ({ route }) => {
         setUserId(id);
     };
 
-    const addToLibrary = async (bookId) => {
+    const addToLibrary = async () => {
         if (!userId) {
-            Alert.alert('User ID not set', 'Cannot add book to library.');
+            Alert.alert('User ID not found', 'Cannot add book to library.');
+            return;
+        }
+        if (!book || !book.Id) {
+            Alert.alert('Error', 'Book information is incomplete.');
             return;
         }
 
         const payload = {
-            BookId: bookId,
+            BookId: book.Id,
             UserId: userId,
-            ReadingStatus: 'to read', // or any default status
+            ReadingStatus: 'to read',
         };
 
         console.log('Sending data to Library:', payload);
@@ -45,11 +49,11 @@ const BookDetails = ({ route }) => {
         const { ok, data, error } = await fetchApi('Library', 'POST', payload);
 
         if (ok) {
+            console.log('Book added to library:', data);
             Alert.alert('Success', 'Book added to library!');
         } else {
-            // The error might contain more details about why the request failed
             console.error('Error while adding book:', error);
-            Alert.alert('Error Adding Book', error);
+            Alert.alert('Error', `Could not add book to library: ${error}`);
         }
     };
 
@@ -63,13 +67,13 @@ const BookDetails = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Text>Title: {book.title}</Text>
-            <Text>Author: {book.author}</Text>
-            <Text>ISBN: {book.isbn}</Text>
-            <Text>Genre: {book.genre}</Text>
-            <Text>Publication Year: {book.publicationYear}</Text>
-            <Text>Synopsis: {book.synopsis || 'N/A'}</Text>
-            <Button title="Add to My Library" onPress={() => addToLibrary(book.id)} />
+            <Text>Title: {book.Title}</Text>
+            <Text>Author: {book.Author}</Text>
+            <Text>ISBN: {book.ISBN}</Text>
+            <Text>Genre: {book.Genre}</Text>
+            <Text>Publication Year: {book.PublicationYear}</Text>
+            <Text>Synopsis: {book.Synopsis || 'N/A'}</Text>
+            <Button title="Add to My Library" onPress={() => addToLibrary(book.Id)} />
         </View>
     );
 };
