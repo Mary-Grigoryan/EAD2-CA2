@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, FlatList, Text, Alert, TextInput, StyleSheet, Button } from 'react-native';
+import { View, FlatList, Text, Alert, TextInput, StyleSheet, Button, Image } from 'react-native';
 import { fetchApi } from '../services/api';
 import { getUserId } from '../services/userServices';
 
@@ -57,6 +57,10 @@ const SearchPage = () => {
 
     return (
         <View style={styles.container}>
+            <Image
+                source={require('./books.png')}
+                style={styles.headerImage}
+            />
             <TextInput
                 style={styles.searchInput}
                 value={searchQuery}
@@ -85,6 +89,12 @@ const SearchPage = () => {
 };
 
 const styles = StyleSheet.create({
+    headerImage: {
+        width: '100%',
+        height: 200,
+        resizeMode: 'contain',
+        marginBottom: 20,
+    },
     container: {
         flex: 1,
         alignItems: 'center',
