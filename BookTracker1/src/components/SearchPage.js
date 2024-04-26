@@ -3,12 +3,14 @@ import { useNavigation } from '@react-navigation/native';
 import { View, FlatList, Text, Alert, TextInput, StyleSheet, Button } from 'react-native';
 import { fetchApi } from '../services/api';
 import { getUserId } from '../services/userServices';
+import { useTransition } from 'react-i18next';
 
 const SearchPage = () => {
     const [books, setBooks] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [userId, setUserId] = useState(null);
     const navigation = useNavigation(); // Get navigation prop
+    const { t } = useTransition();
 
     useEffect(() => {
         const initializeUserId = async () => {
@@ -54,24 +56,25 @@ const SearchPage = () => {
         navigation.navigate('My Library');
     };
 
-
     return (
         <View style={styles.container}>
             <TextInput
                 style={styles.searchInput}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                placeholder="Search books by title"
+                placeholder={t('Search books by title')}
             />
-            <Button title="Search" onPress={searchBooks} />
-            <Button title="Go to My Library" onPress={goToMyLibrary} />
+            <View style={styles.buttonContainer}>
+                <Button title={t('Search')} color="#8FBC8F" onPress={searchBooks} />
+                <Button title={t('Go to My Library')} color="#8FBC8F" onPress={goToMyLibrary} />
+            </View>
             <FlatList
                 data={books}
                 keyExtractor={(item, index) => item?.id?.toString() ?? `default-${index}`}
                 renderItem={({ item }) => (
                     <View>
                         <Text>{item.Title} - {item.Author} ({item.PublicationYear})</Text>
-                        <Button title="View Details" onPress={() => navigateToBookDetails(item.Id)} />
+                        <Button title={t('View Details')} onPress={() => navigateToBookDetails(item.Id)} />
                     </View>
                 )}
                 contentContainerStyle={styles.listContainer}
@@ -84,20 +87,35 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        paddingTop: 20,
+        justifyContent: 'flex-start', // changed to flex-start to have search on top
+        paddingTop: 20 // add some padding at the top
     },
     searchInput: {
         height: 40,
         width: '90%',
-        borderColor: 'gray',
+        borderColor: '#D3D3D3', // light grey border
         borderWidth: 1,
         paddingLeft: 10,
         marginTop: 10,
         marginBottom: 20,
     },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '90%',
+        marginBottom: 20,
+    },
     listContainer: {
         padding: 20,
+    },
+    bookItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#D3D3D3', // light grey border for items
+        marginBottom: 10,
+    },
+    bookText: {
+        color: '#2F4F4F', // sage green text
     },
 });
 
